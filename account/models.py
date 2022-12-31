@@ -90,9 +90,9 @@ class CustomUser(AbstractUser):
 
     objects = UserManager()
 
-    USERNAME_FIELD = "phone"
+    USERNAME_FIELD = "email"
 
-    REQUIRED_FIELDS = ["nid", "name", "email"]
+    REQUIRED_FIELDS = ["nid", "name", "phone"]
 
     def __str__(self):
         return f"(%s) %s" % (self.name, self.nid)
