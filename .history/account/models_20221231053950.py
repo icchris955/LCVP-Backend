@@ -14,15 +14,11 @@ CHOICES_ACCOUNT_TYPE = (
 class UserManager(BaseUserManager):
     """Define a model manager for a custom user"""
 
-    def _create_user(self, email, nid, phone, password=None, **extra_fields):
-        if not nid:
-            raise ValueError("NID should be provided.")
+    def _create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError("Email should be provided.")
-        if not phone:
-            raise ValueError("Phone number should be provided.")
         email = self.normalize_email(email)
-        user = self.model(nid=nid, email=email, phone=phone, **extra_fields)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
@@ -31,8 +27,8 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, nid, phone, password, **extra_fields)
 
-    def create_superuser(self, email, nid, phone, password=None, **extra_fields):
-        """Create a superuser with NID,  email, phone and password"""
+    def create_superuser(self, email, password=None, **extra_fields):
+        """Create a superuser with email and password"""
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_admin", True)
         extra_fields.setdefault("is_superuser", True)
@@ -42,7 +38,7 @@ class UserManager(BaseUserManager):
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
 
-        return self._create_user(email, nid, phone, password, **extra_fields)
+        return self._create_user(email, password, **extra_fields)
 
 
 class CustomUser(AbstractUser):
@@ -139,3 +135,11 @@ class AdditionalInfo(models.Model):
 
     def __str__(self):
         return f"%s" % self.user.name
+
+
+class Rate(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    count = models.PositiveSmallIntegerField(default=0, null=True)
+
+    def __str__(self):
+        return f"Rating #%s" % self.id

@@ -139,3 +139,11 @@ class AdditionalInfo(models.Model):
 
     def __str__(self):
         return f"%s" % self.user.name
+
+
+class Rate(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    count = models.PositiveSmallIntegerField(default=0, null=True)
+
+    def __str__(self):
+        return f"Rating #%s" % self.id

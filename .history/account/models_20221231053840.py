@@ -14,9 +14,7 @@ CHOICES_ACCOUNT_TYPE = (
 class UserManager(BaseUserManager):
     """Define a model manager for a custom user"""
 
-    def _create_user(self, email, nid, phone, password=None, **extra_fields):
-        if not nid:
-            raise ValueError("NID should be provided.")
+    def _create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError("Email should be provided.")
         if not phone:
@@ -139,3 +137,11 @@ class AdditionalInfo(models.Model):
 
     def __str__(self):
         return f"%s" % self.user.name
+
+
+class Rate(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    count = models.PositiveSmallIntegerField(default=0, null=True)
+
+    def __str__(self):
+        return f"Rating #%s" % self.id
