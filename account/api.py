@@ -42,7 +42,7 @@ class UserRegisterView(APIView):
             "to": [user.email],
         }
 
-        EmailUtil.send_email(data)
+        # EmailUtil.send_email(data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
